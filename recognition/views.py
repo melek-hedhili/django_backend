@@ -13,12 +13,15 @@ from rest_framework.response import Response
 #import get_expression from recognition.py
 
 from recognition.emotion_detection.recognition import get_expression
+from recognition.emotion_detection.videotester import get_video_expression
 
 #importing the firebase config file
 from FirebaseConfig import *
 
 def home(request):
     return HttpResponse("Hello, world. You're at the recognition home.")
+
+
 @api_view(['POST'])
 def uploadImage(request):
     #get all images from request
@@ -46,7 +49,30 @@ def uploadImage(request):
     except Exception as e:
         return Response("Error: "+str(e), status=status.HTTP_400_BAD_REQUEST)
                
-    
+@api_view(['POST'])
+def uploadVideo(request):
+    #get the video from request
+    video=request.FILES.getlist('video')
+    print(video)
+    #save video to firebase storage in try except block
+    try:
+        storage.child("videos").child(video[0].name).put(video[0])
+        #get link of video
+        link=storage.child("videos").child(video[0].name).get_url(None)
+        #download the video from firebase storage and save it to local directory
+        storage.child("videos").child(video[0].name).download(path=f"{desktop}/server/recognition/downloads/",filename="new_"+video[0].name,)
+        #get the emotion of the video
+        expression_video=get_video_expression(os.path.abspath("new_"+video[0].name))
+        #save the expression_video to firebase storage
+        storage.child("treated_video").child(video[0].name).put(expression_video)
+        #get the link of the video
+        link_video=storage.child("treated_video").child(video[0].name).get_url(None)
+        #retun response with the emotion of the video + link of the video and success message
+        return Response({"success":True,"original_video_url":link,"treated_video_url":link_video},status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response("Error: "+str(e), status=status.HTTP_400_BAD_REQUEST)
+
+
     
     
 

@@ -14,6 +14,10 @@ from keras.models import load_model
 from pyrebase import pyrebase
 #importing the firebase config file
 from FirebaseConfig import *
+user_name="Melek Hedhili"
+import datetime
+date_time = datetime.datetime.now()
+date_time = date_time.strftime("%Y-%m-%d")
 
 # Working with pre trained model 
 def get_expression(image_path):
@@ -39,7 +43,7 @@ def get_expression(image_path):
      
 )
 
-  train_data = train_datagen.flow_from_directory(directory= f"{desktop}/server/recognition/emotion_detection/train", 
+  train_data = train_datagen.flow_from_directory(directory= "./recognition/emotion_detection/train", 
                                                target_size=(224,224), 
                                                batch_size=32,)
 
@@ -48,7 +52,7 @@ def get_expression(image_path):
 
   val_datagen = ImageDataGenerator(rescale = 1./255 )
 
-  val_data = val_datagen.flow_from_directory(directory= f"{desktop}/server/recognition/emotion_detection/test", 
+  val_data = val_datagen.flow_from_directory(directory= "./recognition/emotion_detection/test", 
                                            target_size=(224,224), 
                                            batch_size=32,)
 
@@ -65,7 +69,7 @@ def get_expression(image_path):
   call_back = [es, mc]
 
 
-  model = load_model(f"{desktop}/server/recognition/emotion_detection/best_model.h5")
+  model = load_model("./recognition/emotion_detection/best_model.h5")
 
 
   op = dict(zip( train_data.class_indices.values(), train_data.class_indices.keys()))
@@ -77,7 +81,7 @@ def get_expression(image_path):
   input_arr.shape
 
   pred = np.argmax(model.predict(input_arr))
-  expression= op[pred]
+  expression= user_name+op[pred]
 
   print(f" the image is of {expression}")
 
@@ -87,12 +91,20 @@ def get_expression(image_path):
   plt.imshow(input_arr[0])
   plt.title(op[pred])
   #save the image with different names
+  
+  #get date and time
+
+
+  
   path = desktop+"/server/treated_image/"+expression+".png"
   plt.savefig(path)
   #save image to firebase storage
-  storage.child("treated_image/"+expression+".png").put(path)
+
+  storage.child(f"treated_image/{user_name}/{date_time}/{expression}.png").put(path)
   #get the url of the image
-  url = storage.child("treated_image/"+expression+".png").get_url(None)
+  url = storage.child(f"treated_image/{user_name}/{date_time}/{expression}.png").get_url(None)
+  #print current directory
+  
 
 
 
