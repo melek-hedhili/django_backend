@@ -3,26 +3,29 @@ import os
 
 import cv2
 import numpy as np
-from keras.preprocessing import image
 import warnings
-from sympy import true
 warnings.filterwarnings("ignore")
 from tensorflow.keras.utils import load_img, img_to_array 
 from keras.models import  load_model
-import matplotlib.pyplot as plt
 import numpy as np
-import scipy
+list=[]
+final_list=[]
+final_list_object={}
 # load model
 def get_video_expression(video_path):
+  
     path_for_video="./treated_video/output.avi"
 
     model = load_model("./recognition/emotion_detection/best_model.h5")
     face_haar_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     cap = cv2.VideoCapture(video_path)
-    out = cv2.VideoWriter(path_for_video, cv2.VideoWriter_fourcc('M','J','P','G'), 10, (640,480))
+    out = cv2.VideoWriter(path_for_video, cv2.VideoWriter_fourcc(*"X264"), 20, (640,480))
+    duration = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+    duration=duration/10  
+    print("durataion",duration)
     while True:
         ret, test_img = cap.read()
-        end_of_video=False  # captures frame and returns boolean value and captured image
+         
         if ret:
             gray_img = cv2.cvtColor(test_img, cv2.COLOR_BGR2RGB)
             faces_detected = face_haar_cascade.detectMultiScale(gray_img, 1.32, 5)
@@ -38,13 +41,18 @@ def get_video_expression(video_path):
                 emotions = ('angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral')
                 predicted_emotion = emotions[max_index]
                 cv2.putText(test_img, predicted_emotion, (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+            list.append(predicted_emotion)
             resized_img = cv2.resize(test_img, (640, 480))  
             predicted_video=out.write(resized_img)
         else:
             break
+    length=len(list)
+    print("length",length)
     cap.release()
     out.release()
     cv2.destroyAllWindows()
     print("The video was successfully saved")
-    return path_for_video
+    
+    print(list)
+    return {"path_for_video":path_for_video,"final_list":list}
 
