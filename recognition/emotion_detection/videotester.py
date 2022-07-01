@@ -5,24 +5,23 @@ import cv2
 import numpy as np
 import warnings
 warnings.filterwarnings("ignore")
-from tensorflow.keras.utils import load_img, img_to_array 
+from tensorflow.keras.utils import img_to_array 
 from keras.models import  load_model
 import numpy as np
 list=[]
-final_list=[]
-final_list_object={}
+from recognition.emotion_detection.recognition import user_name,date_time
 # load model
 def get_video_expression(video_path):
   
-    path_for_video="./treated_video/output.avi"
+    path_for_video=f'./treated_video/{user_name}_{date_time}_video.avi'
 
-    model = load_model("./recognition/emotion_detection/best_model.h5")
+    model = load_model("./recognition/emotion_detection/best_model_2.h5")
     face_haar_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     cap = cv2.VideoCapture(video_path)
     out = cv2.VideoWriter(path_for_video, cv2.VideoWriter_fourcc(*"X264"), 20, (640,480))
-    duration = cap.get(cv2.CAP_PROP_FRAME_COUNT)
-    duration=duration/10  
-    print("durataion",duration)
+    # duration = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+    # duration=duration/10  
+    # print("durataion",duration)
     while True:
         ret, test_img = cap.read()
          
@@ -46,13 +45,12 @@ def get_video_expression(video_path):
             predicted_video=out.write(resized_img)
         else:
             break
-    length=len(list)
-    print("length",length)
     cap.release()
     out.release()
     cv2.destroyAllWindows()
     print("The video was successfully saved")
     
     print(list)
+    
     return {"path_for_video":path_for_video,"final_list":list}
 

@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from tensorflow.keras.utils import img_to_array , load_img
 from keras.models import load_model
+import os
 #importing the firebase config file
 from FirebaseConfig import *
 user_name="Melek Hedhili"
@@ -34,4 +35,6 @@ def get_expression(image_path):
   #get the url of the image
   url = url+storage.child(f"treated_image/{user_name}/{date_time}/{expression}.png").get_url(None)+" ,"
   print({"expression":expression,"treated_image_url":url})
+  os.remove(path)
+  
   return {"expression":expression,"treated_image_url":url}
