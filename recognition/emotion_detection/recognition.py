@@ -15,7 +15,7 @@ url=""
 expression=""
 def get_expression(image_path):
   global url,expression
-  model = load_model("./recognition/emotion_detection/best_model.h5")
+  model = load_model("./recognition/emotion_detection/best_model_2.h5")
   op = {0: 'Angry', 1: 'Disguist', 2: 'Fear', 3: 'Happy', 4: 'Neutral', 5: 'Sad', 6: 'Surprise'}
   img = load_img(image_path, target_size=(224,224) )
   i = img_to_array(img)/255
