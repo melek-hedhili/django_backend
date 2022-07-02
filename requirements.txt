@@ -30,16 +30,11 @@ executing==0.8.3
 fastjsonschema==2.15.3
 filelock==3.7.1
 fire==0.4.0
-Flask==2.1.2
 flatbuffers==1.12
 fonttools==4.33.3
 gast==0.4.0
 gcloud==0.18.3
 gdown==4.5.1
-google-auth==2.7.0
-google-auth-oauthlib==0.4.6
-google-pasta==0.2.0
-googleapis-common-protos==1.56.2
 grpcio==1.46.3
 gunicorn==20.1.0
 h5py==3.7.0
@@ -83,7 +78,6 @@ oauthlib==3.2.0
 opencv-python-headless==4.6.0.66
 opt-einsum==3.3.0
 packaging==21.3
-pandas==1.4.2
 pandocfilters==1.5.0
 parso==0.8.3
 pickleshare==0.7.5
