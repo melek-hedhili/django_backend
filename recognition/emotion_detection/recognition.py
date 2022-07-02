@@ -27,12 +27,12 @@ def get_expression(image_path):
   plt.imshow(input_arr[0])
   plt.title(op[pred])
   #get date and time
-  path = "./treated_image/"+user_name+" is "+op[pred]+".png"
+  path =user_name+" is "+op[pred]+".png"
   plt.savefig(path)
   #save image to firebase storage
-  storage.child(f"treated_image/{user_name}/{date_time}/{expression}.png").put(path)
+  storage.child(f"{user_name}/{date_time}/{expression}.png").put(path)
   #get the url of the image
-  url = url+storage.child(f"treated_image/{user_name}/{date_time}/{expression}.png").get_url(None)+" ,"
+  url = url+storage.child(f"{user_name}/{date_time}/{expression}.png").get_url(None)+" ,"
   print({"expression":expression,"treated_image_url":url})
   os.remove(path)
   
