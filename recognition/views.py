@@ -63,11 +63,11 @@ def uploadVideo(request):
         #get link of video
         link=storage.child("videos").child(video[0].name).get_url(None)
         #download the video from firebase storage and save it to local directory
-        storage.child("videos").child(video[0].name).download(path=f"./recognition/downloads/{path}",filename=path)
+        storage.child("videos").child(video[0].name).download(path=path,filename=path)
         #get the emotion of the video
-        expression_video=get_video_expression(os.path.abspath(path))
+        expression_video=get_video_expression(path)
         #save the expression_video to firebase storage
-        
+        print("path=",expression_video["path_for_video"])
         
         storage.child("treated_video").child(video[0].name).put(f'{expression_video["path_for_video"]}')
         
@@ -77,8 +77,8 @@ def uploadVideo(request):
         #get the link of the video
         link_video=storage.child("treated_video").child(video[0].name).get_url(None) 
         #retun response with the emotion of the video + link of the video and success message
-        os.remove(path)
-        os.remove(expression_video["path_for_video"])
+        #os.remove(path)
+        #os.remove(expression_video["path_for_video"])
         return Response({"success":True,"original_video_url":link,"treated_video_url":link_video,"emotions list":f'{expression_video["final_list"]}'},status=status.HTTP_200_OK)
         
     except Exception as e:

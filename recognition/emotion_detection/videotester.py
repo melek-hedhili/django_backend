@@ -13,7 +13,7 @@ from recognition.emotion_detection.recognition import user_name,date_time
 # load model
 def get_video_expression(video_path):
   
-    path_for_video=f'{user_name}_{date_time}_video.avi'
+    path_for_video=user_name+"_"+date_time+".avi"
 
     model = load_model("./recognition/emotion_detection/best_model_2.h5")
     face_haar_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -47,7 +47,7 @@ def get_video_expression(video_path):
             break
     cap.release()
     out.release()
-    
+    #cv2.destroyAllWindows()
     print("The video was successfully saved")
     
     print(list)
