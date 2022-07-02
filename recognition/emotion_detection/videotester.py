@@ -47,7 +47,7 @@ def get_video_expression(video_path):
             break
     cap.release()
     out.release()
-    cv2.destroyAllWindows()
+    
     print("The video was successfully saved")
     
     print(list)
