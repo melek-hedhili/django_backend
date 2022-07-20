@@ -18,7 +18,8 @@ def get_video_expression(video_path):
     model = load_model("./recognition/emotion_detection/best_model_2.h5")
     face_haar_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     cap = cv2.VideoCapture(video_path)
-    out = cv2.VideoWriter(path_for_video, cv2.VideoWriter_fourcc(*"X264"), 20, (640,480))
+    out = cv2.VideoWriter(path_for_video, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 20, (640,480))
+    #X264
     # duration = cap.get(cv2.CAP_PROP_FRAME_COUNT)
     # duration=duration/10  
     # print("durataion",duration)
