@@ -85,11 +85,12 @@ def uploadVideo(request):
         #get the link of the video
         link_video=storage.child("treated_video").child(expression_video["path_for_video"]).get_url(None) 
         #retun response with the emotion of the video + link of the video and success message
-        #.remove(path)
-        #os.remove(expression_video["path_for_video"])
+        os.remove(os.path.abspath(path))
+        os.remove(expression_video["path_for_video"])
         return Response({"success":True,"original_video_url":link,"treated_video_url":link_video},status=status.HTTP_200_OK)
         
     except Exception as e:
+        os.remove(os.path.abspath(path))
         return Response("Error: "+str(e), status=status.HTTP_400_BAD_REQUEST)
 
 
