@@ -8,23 +8,24 @@ warnings.filterwarnings("ignore")
 from tensorflow.keras.utils import img_to_array 
 from keras.models import  load_model
 import numpy as np
-list=[]
 from recognition.emotion_detection.recognition import user_name,date_time
 # load model
 def get_video_expression(video_path):
-  
-    path_for_video=user_name+"_"+date_time+".avi"
+    
+    path_for_video=user_name+"_"+date_time+".mp4"
 
     model = load_model("./recognition/emotion_detection/best_model_2.h5")
     face_haar_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     cap = cv2.VideoCapture(video_path)
-    out = cv2.VideoWriter(path_for_video, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 20, (640,480))
-    #X264
-    # duration = cap.get(cv2.CAP_PROP_FRAME_COUNT)
-    # duration=duration/10  
-    # print("durataion",duration)
+    #video writer for phone recorded videos (1080,1920)
+    #video writer for pc recorded videos (640,480) 
+    out = cv2.VideoWriter(path_for_video, cv2.VideoWriter_fourcc(*'X264'), 20, (640,480))
+    #X264 to drop quality
+
     while True:
         ret, test_img = cap.read()
+        #videos recorded from phones are recieved rotated 180° , remove this statement below if you are working with videos recorded with pc
+        test_img = cv2.rotate(test_img, cv2.ROTATE_180)
          
         if ret:
             gray_img = cv2.cvtColor(test_img, cv2.COLOR_BGR2RGB)
@@ -41,8 +42,9 @@ def get_video_expression(video_path):
                 emotions = ('angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral')
                 predicted_emotion = emotions[max_index]
                 cv2.putText(test_img, predicted_emotion, (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-            list.append(predicted_emotion)
-            resized_img = cv2.resize(test_img, (640, 480))  
+            #video writer for phone recorded videos (1080,1920)
+            #video writer for pc recorded videos (640,480) 
+            resized_img = cv2.resize(test_img, (640,480))  
             predicted_video=out.write(resized_img)
         else:
             break
@@ -51,7 +53,7 @@ def get_video_expression(video_path):
     #cv2.destroyAllWindows()
     print("The video was successfully saved")
     
-    print(list)
+
     
-    return {"path_for_video":path_for_video,"final_list":list}
+    return {"path_for_video":path_for_video}
 

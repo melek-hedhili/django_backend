@@ -3,11 +3,13 @@ import os
 #desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop') #get desktop path (
     #problems encountered when saving image to a path , must give full path)
 from django.http import HttpResponse
+from numpy import empty
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 #import jsonresonse
 from django.http import JsonResponse
+import json
 
 #import get_expression from recognition.py
 from recognition.emotion_detection.recognition import get_expression
@@ -26,6 +28,7 @@ def home(request):
 
 @api_view(['POST'])
 def uploadImage(request):
+    print("request is ",request.method)
     if request.method == 'POST':
         expression=[]
         image = request.FILES.getlist('image')
@@ -44,16 +47,14 @@ def uploadImage(request):
                 storage.child(f"{user_name}/{date_time}/{i.name}").download(path=f"./recognition/downloads/{path}",filename=path)
                 #get the emotion of the image
                 result=get_expression(os.path.abspath(path))
-                print("type of",type(result))
-                result["link"]=link
+                print("type of",result)
+                result["link"]=link                
                 expression.append(result)
-
-                
-                #expression.append({'image_url':link})
-            #retun response with the emotion of the image + link of the image and success message
-            os.remove(path)
-            return Response({"success":True,"data":expression},status=status.HTTP_200_OK)      
+                json_obj=json.dumps({"success":True,"data":expression})
+                os.remove(path)
+                return Response(json_obj,status=status.HTTP_200_OK)      
         except Exception as e:
+            os.remove(path)
             return Response("Error: "+str(e), status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response("Error: Method not allowed", status=status.HTTP_400_BAD_REQUEST)
@@ -79,14 +80,14 @@ def uploadVideo(request):
         print(expression_video)
         
         
-        storage.child("treated_video").child(video[0].name).put(f'{expression_video["path_for_video"]}')
+        storage.child("treated_video").child(expression_video["path_for_video"]).put(f'{expression_video["path_for_video"]}')
 
         #get the link of the video
-        link_video=storage.child("treated_video").child(video[0].name).get_url(None) 
+        link_video=storage.child("treated_video").child(expression_video["path_for_video"]).get_url(None) 
         #retun response with the emotion of the video + link of the video and success message
         #.remove(path)
         #os.remove(expression_video["path_for_video"])
-        return Response({"success":True,"original_video_url":link,"treated_video_url":link_video,"emotions list":f'{expression_video["final_list"]}'},status=status.HTTP_200_OK)
+        return Response({"success":True,"original_video_url":link,"treated_video_url":link_video},status=status.HTTP_200_OK)
         
     except Exception as e:
         return Response("Error: "+str(e), status=status.HTTP_400_BAD_REQUEST)
