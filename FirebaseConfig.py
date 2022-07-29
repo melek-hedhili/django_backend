@@ -19,7 +19,7 @@ config = {
   "messagingSenderId": "471249806784",
   "appId": "1:471249806784:web:96b6d56cbc9037f2cd5425",
   "measurementId": "G-7FT6CL03TR",
-"databaseURL": "gs://dwave-52e42.appspot.com",
+"databaseURL": "https://dwave-52e42-default-rtdb.firebaseio.com/",
 
 }
 firebase = pyrebase.initialize_app(config)

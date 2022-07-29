@@ -9,6 +9,7 @@ from tensorflow.keras.utils import img_to_array
 from keras.models import  load_model
 import numpy as np
 from recognition.emotion_detection.recognition import user_name,date_time
+list=[]
 # load model
 def get_video_expression(video_path):
     
@@ -42,6 +43,7 @@ def get_video_expression(video_path):
                 emotions = ('angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral')
                 predicted_emotion = emotions[max_index]
                 cv2.putText(test_img, predicted_emotion, (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+            list.append(predicted_emotion)
             #video writer for phone recorded videos (1080,1920)
             #video writer for pc recorded videos (640,480) 
             resized_img = cv2.resize(test_img, (640,480))  
@@ -52,8 +54,6 @@ def get_video_expression(video_path):
     out.release()
     #cv2.destroyAllWindows()
     print("The video was successfully saved")
-    
-
-    
-    return {"path_for_video":path_for_video}
+    print(list)
+    return {"path_for_video":path_for_video,"final_list":list}
 

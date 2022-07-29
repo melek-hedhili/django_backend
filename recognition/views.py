@@ -84,6 +84,11 @@ def uploadVideo(request):
 
         #get the link of the video
         link_video=storage.child("treated_video").child(expression_video["path_for_video"]).get_url(None) 
+        #save the list of emotions to firebase database
+        data={"emotions":expression_video["final_list"],"link":link_video}
+        db.child(user_name).child(date_time).push(data)
+        #get link of firebase realtime database
+        #link_db=db.child(user_name).child(date_time).get_url(None)
         #retun response with the emotion of the video + link of the video and success message
         os.remove(os.path.abspath(path))
         os.remove(expression_video["path_for_video"])
