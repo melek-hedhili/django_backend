@@ -13,6 +13,7 @@ list=[]
 # load model
 def get_video_expression(video_path):
     
+    
     path_for_video=user_name+"_"+date_time+".mp4"
 
     model = load_model("./recognition/emotion_detection/best_model_2.h5")

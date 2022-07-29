@@ -12,16 +12,15 @@ from pyrebase import pyrebase
 # }
 
 config = {
-  "apiKey": "AIzaSyC0JCd3vkI320V6BRj0ZJABviJfNKq_JeM",
-  "authDomain": "dwave-52e42.firebaseapp.com",
-  "projectId": "dwave-52e42",
-  "storageBucket": "dwave-52e42.appspot.com",
-  "messagingSenderId": "471249806784",
-  "appId": "1:471249806784:web:96b6d56cbc9037f2cd5425",
-  "measurementId": "G-7FT6CL03TR",
-"databaseURL": "https://dwave-52e42-default-rtdb.firebaseio.com/",
-
-}
+  "apiKey": "AIzaSyCKl4tCOcWR7apRdJN9f90Zm6EoEtk4akE",
+  "authDomain": "dwave2-ba3cd.firebaseapp.com",
+  "databaseURL": "https://dwave2-ba3cd-default-rtdb.firebaseio.com",
+  "projectId": "dwave2-ba3cd",
+  "storageBucket": "dwave2-ba3cd.appspot.com",
+  "messagingSenderId": "525608993922",
+  "appId": "1:525608993922:web:1ead465c6c5bb376f4e09b",
+  "measurementId": "G-T7SBL9TBQT"
+};
 firebase = pyrebase.initialize_app(config)
 storage=firebase.storage()
 db=firebase.database()
